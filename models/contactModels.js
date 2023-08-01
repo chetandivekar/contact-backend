@@ -8,17 +8,15 @@ const contactSchema = mongoose.Schema(
     },
     lname: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
-      required: true,
     },
     number: {
       type: Number,
       required: true,
     },
-    User: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
