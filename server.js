@@ -1,5 +1,4 @@
 import express from "express";
-import data from "./Data/data.js";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
@@ -12,11 +11,7 @@ connectDB();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("hey");
-});
-
-app.get("/api/data", (req, res) => {
-  res.send(data.products);
+  res.send("Connected");
 });
 
 app.use("/api/users", userRoutes);
