@@ -31,4 +31,56 @@ const createContact = asyncHandler(async (req, res) => {
   }
 });
 
-export { allContacts, createContact };
+const getContactById = asyncHandler(async (req, res) => {
+  const contact = await Contact.findById(req.params.id);
+  if (contact) {
+    res.status(201).json(contact);
+  } else {
+    res.status(404).json({ message: "not found" });
+  }
+});
+
+const updateContact = asyncHandler(async (req, res) => {
+  const { fname, lname, email, number } = req.body;
+  const contact = await Contact.findById(req.params.id);
+
+  if (contact.user.toString() !== req.user._id.toString()) {
+    throw new Error("You can't perform the action");
+  }
+  if (contact) {
+    contact.fname = fname;
+    contact.lname = lname;
+    contact.email = email;
+    contact.number = number;
+
+    const updatedContact = await contact.save();
+    res.json(updatedContact);
+  } else {
+    throw new Error("contact not found");
+  }
+});
+
+const deleteContact = asyncHandler(async (req, res) => {
+  const contact = await Contact.findById(req.params.id);
+  if (!contact) {
+    throw new Error("Contact not found");
+  }
+
+  if (contact.user.toString() !== req.user._id.toString()) {
+    throw new Error("You can't perform the action");
+  }
+  if (contact) {
+    await contact.deleteOne();
+    res.status(201).json("Contact Removed");
+  } else {
+    throw new Error("contact not found");
+  }
+});
+
+export {
+  allContacts,
+  createContact,
+  getContactById,
+  updateContact,
+  deleteContact,
+};
